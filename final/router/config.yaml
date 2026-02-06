@@ -1,0 +1,187 @@
+cors:
+  origins:
+    - http://localhost:3000 # Allows any locally-running client to run against your Router
+    - https://studio.apollographql.com # Allows Apollo Studio to still run queries against your Router
+supergraph:
+  introspection: ${env.ENABLE_INTROSPECTION:-false}
+  listen: ${env.LISTEN_ADDRESS:-0.0.0.0:8082}
+  path: /{*parameter}
+
+
+rhai:
+  main: main.rhai
+  scripts: ../rhai/scripts  
+apq:
+  enabled: false
+include_subgraph_errors:
+  all:
+    redact_message: false
+    allow_extensions_keys:
+      - code
+      - customField
+      - service
+headers:
+  all:
+    request:
+      - propagate:
+          named: EcoServiceFlag
+      - propagate:
+          named: Mbox-Session-ID
+      - propagate:
+          named: SourceSubsystemCode
+      - propagate:
+          named: SourceSystemCode
+      - propagate:
+          named: accept
+      - propagate:
+          named: accept-language
+      - propagate:
+          named: altConsumerId
+      - propagate:
+          named: apollographql-client-name
+      - propagate:
+          named: apollographql-client-version
+      - propagate:
+          named: authorization
+      - propagate:
+          named: baggage
+      - propagate:
+          named: client_id
+      - propagate:
+          named: content-type
+      - propagate:
+          named: cookie
+      - propagate:
+          named: correlation-id
+      - propagate:
+          named: graphql-operation-signature
+      - propagate:
+          named: if-match
+      - propagate:
+          named: oauth_client_id
+      - propagate:
+          named: phx-comp-name
+      - propagate:
+          named: source_system
+      - propagate:
+          named: sub_source_system
+      - propagate:
+          named: test_alt_cust_id
+      - propagate:
+          named: user-agent
+      - propagate:
+          named: uxl-cache-disable
+      - propagate:
+          named: uxl-cache-invalidate
+      - propagate:
+          named: uxl-datasource-insight
+      - propagate:
+          named: uxl-edge-cache-request-regime
+      - propagate:
+          named: uxl-feature-flags
+      - propagate:
+          named: uxl-mgp
+      - propagate:
+          named: uxl-migration-status
+      - propagate:
+          named: version
+      - propagate:
+          named: x-2fa-otp
+      - propagate:
+          named: x-agent-id
+      - propagate:
+          named: x-associate-info
+      - propagate:
+          named: x-b3-spanid
+      - propagate:
+          named: x-b3-traceid
+      - propagate:
+          named: b3-spanid
+      - propagate:
+          named: b3-traceid
+      - propagate:
+          named: x-canary-blue
+      - propagate:
+          named: x-canary-green
+      - propagate:
+          named: x-device-id
+      - propagate:
+          named: x-device-tracking-token
+      - propagate:
+          named: x-operator-id
+      - propagate:
+          named: x-payment-tracking-id
+      - propagate:
+          named: x-request-id
+      - propagate:
+          named: x-requested-by
+      - propagate:
+          named: x-rewards-number
+      - propagate:
+          named: x-session-id
+      - propagate:
+          named: x-session-key
+      - propagate:
+          named: x-privacy-region
+      - propagate:
+          named: x-authorization-all
+      - propagate:
+          named: uxl-cutover-testing
+      - propagate:
+          named: uxl-cart-id
+      - propagate:
+          named: uxl-dtt-property
+      - propagate:
+          named: uxl-root-operation-paths
+      - propagate:
+          named: comparisonInd
+      - propagate:
+          named: x-privacy-group-id
+      - propagate:
+          named: x-alt-cust-id
+      - propagate:
+          named: api-version
+      - propagate:
+          named: x-consumer-application
+      - propagate:
+          named: defaultLocale
+      - propagate:
+          named: dtt-query
+      - propagate:
+          named: aka
+      - propagate:
+          named: x-privacy-ref-id
+traffic_shaping:
+  all:
+    timeout: ${env.SUBGRAPH_TIMEOUT:-15s}
+  router:
+    timeout: ${env.ROUTER_TIMEOUT:-25s}
+coprocessor:
+  router:
+    request:
+      body: true
+      condition:
+        eq:
+          - true
+          - ${env.SAFELIST_ENABLED:-true}
+      context: true
+      headers: true
+      method: false
+      path: false
+      sdl: false
+  supergraph:
+    request:
+      body: true
+      context: true
+      headers: true
+      method: false
+      sdl: false
+  timeout: 100s
+  url: http://127.0.0.1:8081
+limits:
+  max_depth: ${env.MAX_DEPTH:-14}
+  warn_only: true
+homepage:
+  enabled: ${env.ENABLE_HOMEPAGE:-false}
+sandbox:
+  enabled: ${env.ENABLE_SANDBOX:-false}
