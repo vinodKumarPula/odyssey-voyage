@@ -6,7 +6,7 @@ type Query {
 }
 
 type Location {
-  id: ID!
+  id: ID
   "The name of the location"
   name: String!
   "A short description about the location"
